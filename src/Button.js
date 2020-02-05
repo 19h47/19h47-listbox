@@ -21,6 +21,8 @@ export default class Button {
 	}
 
 	init() {
+		this.$label = this.rootElement.querySelector('.js-list-label');
+
 		this.initEvents();
 	}
 
@@ -89,6 +91,15 @@ export default class Button {
 	}
 
 	onFocusChange(item) {
-		this.rootElement.innerText = item.innerText;
+		this.$label.innerText = item.innerText;
+
+		const changeEvent = new CustomEvent('Button.change', {
+			detail: {
+				item,
+				id: item.id,
+			},
+		});
+
+		this.rootElement.dispatchEvent(changeEvent);
 	}
 }

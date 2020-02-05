@@ -83,6 +83,8 @@ Up Arrow | - Moves focus to and selects the previous option.<br>- If the listbox
 Home | If the listbox is displayed, moves focus to and selects the first option.
 Printable Characters | 	- Type a character: focus moves to the next item with a name that starts with the typed character.<br>- Type multiple characters in rapid succession: focus moves to the next item with a name that starts with the string of characters typed.
 
+## Event
+
 ## Example
 
 An example is located right [here](https://19h47.github.io/19h47-list/), see [sources](/docs/index.html).
