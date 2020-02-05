@@ -8,11 +8,15 @@
 	<title>Listbox</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<style>
-		.list-group.hidden {
+		.list-group {
 			display: none;
 		}
 
-		.list-group-item.focused {
+		.list-group.is-active {
+			display: block;
+		}
+
+		.list-group-item.is-active {
 			z-index: 2;
 			color: #fff;
 			background-color: #007bff;
@@ -38,7 +42,7 @@
 						aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
 						<span class="js-list-label">Bat</span>
 					</button>
-					<ul class="list-group js-list-box hidden" tabindex="-1" role="listbox" aria-labelledby="monster-label">
+					<ul class="list-group js-list-box" tabindex="-1" role="listbox" aria-labelledby="monster-label">
 						<li class="list-group-item list-group-item-action" id="monster-bat" role="option">Bat</li>
 						<li class="list-group-item list-group-item-action" id="monster-bear" role="option">Bear</li>
 						<li class="list-group-item list-group-item-action" id="monster-behir" role="option">Behir</li>

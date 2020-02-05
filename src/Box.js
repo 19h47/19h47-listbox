@@ -93,10 +93,10 @@ export default class Box {
 		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
 
 		if ($active) {
-			removeClass($active, 'focused');
+			removeClass($active, 'is-active');
 		}
 
-		addClass(element, 'focused');
+		addClass(element, 'is-active');
 
 		this.rootElement.setAttribute('aria-activedescendant', element.id);
 		this.activeDescendant = element.id;

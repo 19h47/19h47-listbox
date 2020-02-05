@@ -77,7 +77,7 @@ export default class Button {
 	show() {
 		// console.info('Button.show');
 
-		removeClass(this.box.rootElement, 'hidden');
+		addClass(this.box.rootElement, 'is-active');
 
 		this.rootElement.setAttribute('aria-expanded', true);
 		this.box.rootElement.focus();
@@ -86,7 +86,8 @@ export default class Button {
 	hide() {
 		// console.info('Button.hide');
 
-		addClass(this.box.rootElement, 'hidden');
+		removeClass(this.box.rootElement, 'is-active');
+
 		this.rootElement.removeAttribute('aria-expanded');
 	}
 
