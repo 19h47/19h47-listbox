@@ -93,12 +93,7 @@ export default class Button {
 	onFocusChange(item) {
 		this.$label.innerText = item.innerText;
 
-		const changeEvent = new CustomEvent('Button.change', {
-			detail: {
-				item,
-				id: item.id,
-			},
-		});
+		const changeEvent = new CustomEvent('Button.change', { detail: { item } });
 
 		this.rootElement.dispatchEvent(changeEvent);
 	}
