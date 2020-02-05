@@ -12,10 +12,13 @@ export default class Button {
 		this.rootElement = element;
 		this.box = listbox;
 
+		this.isOpen = false;
+
 		// Bind.
-		this.show = this.show.bind(this);
+		this.open = this.open.bind(this);
+		this.toggle = this.toggle.bind(this);
 		this.onKeyUp = this.onKeyUp.bind(this);
-		this.hide = this.hide.bind(this);
+		this.close = this.close.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.onFocusChange = this.onFocusChange.bind(this);
 	}
@@ -27,9 +30,10 @@ export default class Button {
 	}
 
 	initEvents() {
-		this.rootElement.addEventListener('click', this.show);
+		console.log('Button.initEvents');
+		this.rootElement.addEventListener('click', this.toggle);
 		this.rootElement.addEventListener('keyup', this.onKeyUp);
-		this.box.rootElement.addEventListener('blur', this.hide);
+		this.box.rootElement.addEventListener('blur', this.close);
 		this.box.rootElement.addEventListener('keydown', this.onKeyDown);
 		this.box.setHandleFocusChange(this.onFocusChange);
 	}
@@ -39,15 +43,15 @@ export default class Button {
 
 		const key = event.keyCode || event.which;
 
-		const show = () => {
+		const open = () => {
 			event.preventDefault();
-			this.show();
+			this.open();
 			this.box.checkKeyPress(event);
 		};
 
 		const codes = {
-			[UP]: show,
-			[DOWN]: show,
+			[UP]: open,
+			[DOWN]: open,
 			default: () => false,
 		};
 
@@ -59,36 +63,51 @@ export default class Button {
 
 		const key = event.keyCode || event.which;
 
-		const hide = () => {
+		const close = () => {
 			event.preventDefault();
-			this.hide();
+			this.close();
 			this.rootElement.focus();
 		};
 
 		const codes = {
-			[ENTER]: hide,
-			[ESCAPE]: hide,
+			[ENTER]: close,
+			[ESCAPE]: close,
 			default: () => false,
 		};
 
 		return (codes[key] || codes.default)();
 	}
 
-	show() {
-		// console.info('Button.show');
+
+	toggle() {
+		if (this.isOpen) return this.close();
+
+		return this.open();
+	}
+
+	open() {
+		console.info('Button.open');
+
+		if (this.isOpen) return false;
+
+		this.isOpen = true;
 
 		addClass(this.box.rootElement, 'is-active');
 
 		this.rootElement.setAttribute('aria-expanded', true);
-		this.box.rootElement.focus();
+		return this.box.rootElement.focus();
 	}
 
-	hide() {
-		// console.info('Button.hide');
+	close() {
+		console.info('Button.close');
+
+		if (!this.isOpen) return false;
+
+		this.isOpen = false;
 
 		removeClass(this.box.rootElement, 'is-active');
 
-		this.rootElement.removeAttribute('aria-expanded');
+		return this.rootElement.removeAttribute('aria-expanded');
 	}
 
 	onFocusChange(item) {

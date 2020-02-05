@@ -9,6 +9,8 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<style>
 		.list-group {
+			height: 300px;
+			overflow-y: auto;
 			display: none;
 		}
 
@@ -35,7 +37,7 @@
 					</a>
 				</h1>
 			</div>
-			<div class="col-12">
+			<div class="col-6">
 				<div class="js-list">
 					<h2 id="monster-label">Choose an monster:</h2>
 					<button id="monster-button" class="btn btn-outline-primary my-3 js-list-button"
@@ -82,28 +84,58 @@
 					</ul>
 				</div>
 			</div>
+			<div class="col-6">
+				<div class="js-list">
+					<h2 id="monster-label">Choose an monster:</h2>
+					<button id="monster-button" class="btn btn-outline-primary my-3 js-list-button" aria-haspopup="listbox"
+						aria-labelledby="monster-label monster-button" type="button">
+						<span class="js-list-label">Kobold</span>
+					</button>
+					<ul class="list-group js-list-box" tabindex="-1" role="listbox" aria-labelledby="monster-label">
+						<li class="list-group-item list-group-item-action" id="monster-kobold" role="option">Kobold</li>
+						<li class="list-group-item list-group-item-action" id="monster-korred" role="option">Korred</li>
+						<li class="list-group-item list-group-item-action" id="monster-lich" role="option">Lich</li>
+						<li class="list-group-item list-group-item-action" id="monster-lizard" role="option">Lizard</li>
+						<li class="list-group-item list-group-item-action" id="monster-lizard-man" role="option">Lizard man</li>
+						<li class="list-group-item list-group-item-action" id="monster-lycanthrope" role="option">Lycanthrope</li>
+						<li class="list-group-item list-group-item-action" id="monster-manticore" role="option">Manticore</li>
+						<li class="list-group-item list-group-item-action" id="monster-medusa" role="option">Medusa</li>
+						<li class="list-group-item list-group-item-action" id="monster-men" role="option">Men</li>
+						<li class="list-group-item list-group-item-action" id="monster-minotaur" role="option">Minotaur</li>
+						<li class="list-group-item list-group-item-action" id="monster-mud-man" role="option">Mud-man</li>
+						<li class="list-group-item list-group-item-action" id="monster-mummy" role="option">Mummy</li>
+						<li class="list-group-item list-group-item-action" id="monster-nixie" role="option">Nixie</li>
+						<li class="list-group-item list-group-item-action" id="monster-nymph" role="option">Nymph</li>
+						<li class="list-group-item list-group-item-action" id="monster-ogre" role="option">Ogre</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 
 
 	<script src="main.js"></script>
 	<script>
-		const $list = document.querySelector('.js-list');
+		const lists = [...document.querySelectorAll('.js-list')];
 
-		const $box = $list.querySelector('.js-list-box');
-		const $button = $list.querySelector('.js-list-button');
+		lists.map($list => {
+			const $box = $list.querySelector('.js-list-box');
+			const $button = $list.querySelector('.js-list-button');
 
-		// Init box.
-		const box = new List.Box($box);
-		box.init();
+			// Init box.
+			const box = new List.Box($box);
+			box.init();
 
-		// Init button.
-		const button = new List.Button($button, box);
-		button.init();
 
-		$button.addEventListener('Button.change', (event) => {
-			console.log(event.detail);
+			// Init button.
+			const button = new List.Button($button, box);
+			button.init();
+
+			$button.addEventListener('Button.change', (event) => {
+				console.log(event.detail);
+			});
 		});
+
 	</script>
 </body>
 
