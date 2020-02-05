@@ -85,6 +85,16 @@ Printable Characters | 	- Type a character: focus moves to the next item with a 
 
 ## Event
 
+```
+Button.change
+```
+
+## Options
+
+```
+delay
+```
+
 ## Example
 
 An example is located right [here](https://19h47.github.io/19h47-list/), see [sources](/docs/index.html).

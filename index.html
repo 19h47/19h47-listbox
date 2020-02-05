@@ -11,11 +11,13 @@
 		.list-group {
 			height: 300px;
 			overflow-y: auto;
-			display: none;
+			visibility: hidden;
+			opacity: 0;
 		}
 
 		.list-group.is-active {
-			display: block;
+			visibility: visible;
+			opacity: 1;
 		}
 
 		.list-group-item.is-active {

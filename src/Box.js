@@ -11,6 +11,9 @@ export default class Box {
 	constructor(element) {
 		this.rootElement = element;
 
+		this.handleFocusChange = null;
+		this.keysSoFar = '';
+
 		// Bind.
 		this.onFocus = this.onFocus.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
@@ -23,9 +26,6 @@ export default class Box {
 		this.activeDescendant = this.rootElement.getAttribute('aria-activedescendant');
 		this.items = [...this.rootElement.querySelectorAll('[role="option"]')];
 
-		this.handleFocusChange = null;
-		this.keysSoFar = '';
-
 		this.initEvents();
 	}
 
@@ -36,7 +36,7 @@ export default class Box {
 	}
 
 	onClick(event) {
-		// console.info('Box.onClick');
+		console.info('Box.onClick');
 
 		const { target } = event;
 
@@ -46,6 +46,8 @@ export default class Box {
 	}
 
 	onFocus() {
+		console.log('Box.onFocus');
+
 		if (this.activeDescendant) {
 			return false;
 		}
@@ -88,15 +90,17 @@ export default class Box {
 	}
 
 	focusItem(element) {
-		// console.info('Box.focusItem');
+		console.info('Box.focusItem');
 
 		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
 
 		if ($active) {
 			removeClass($active, 'is-active');
+			$active.removeAttribute('aria-selected');
 		}
 
 		addClass(element, 'is-active');
+		element.setAttribute('aria-selected', true);
 
 		this.rootElement.setAttribute('aria-activedescendant', element.id);
 		this.activeDescendant = element.id;
@@ -114,10 +118,6 @@ export default class Box {
 		}
 
 		this.handleFocusChange(element);
-	}
-
-	setHandleFocusChange(focusChangeHandler) {
-		this.handleFocusChange = focusChangeHandler;
 	}
 
 	findItemToFocus(key) {
@@ -177,7 +177,9 @@ export default class Box {
 		return null;
 	}
 
-	setHandleItemChange(handlerFn) {
-		this.handleItemChange = handlerFn;
+	setHandleFocusChange(focusChangeHandler) {
+		// console.log('Box.setHandleFocusChange');
+
+		this.handleFocusChange = focusChangeHandler;
 	}
 }

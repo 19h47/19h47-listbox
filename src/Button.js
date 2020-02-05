@@ -8,9 +8,13 @@ import {
 import { addClass, removeClass } from '@/utils';
 
 export default class Button {
-	constructor(element, listbox) {
+	constructor(element, box, options = {}) {
 		this.rootElement = element;
-		this.box = listbox;
+		this.box = box;
+		this.options = {
+			delay: 0,
+			...options,
+		};
 
 		this.isOpen = false;
 
@@ -30,7 +34,8 @@ export default class Button {
 	}
 
 	initEvents() {
-		console.log('Button.initEvents');
+		// console.log('Button.initEvents');
+
 		this.rootElement.addEventListener('click', this.toggle);
 		this.rootElement.addEventListener('keyup', this.onKeyUp);
 		this.box.rootElement.addEventListener('blur', this.close);
@@ -39,7 +44,7 @@ export default class Button {
 	}
 
 	onKeyUp(event) {
-		// console.log('Button.onKeyUp');
+		console.log('Button.onKeyUp');
 
 		const key = event.keyCode || event.which;
 
@@ -87,6 +92,7 @@ export default class Button {
 
 	open() {
 		console.info('Button.open');
+		console.log(document.activeElement);
 
 		if (this.isOpen) return false;
 
@@ -95,7 +101,12 @@ export default class Button {
 		addClass(this.box.rootElement, 'is-active');
 
 		this.rootElement.setAttribute('aria-expanded', true);
-		return this.box.rootElement.focus();
+
+		setTimeout(() => {
+			this.box.rootElement.focus();
+		}, this.options.delay);
+
+		return true;
 	}
 
 	close() {
@@ -107,7 +118,9 @@ export default class Button {
 
 		removeClass(this.box.rootElement, 'is-active');
 
-		return this.rootElement.removeAttribute('aria-expanded');
+		this.rootElement.removeAttribute('aria-expanded');
+
+		return true;
 	}
 
 	onFocusChange(item) {
