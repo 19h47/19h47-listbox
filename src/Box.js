@@ -1,8 +1,8 @@
 import {
-	ARROWDOWN,
-	END,
+	ARROW_UP,
+	ARROW_DOWN,
 	HOME,
-	ARROWUP,
+	END,
 } from '@19h47/keycode';
 
 import { addClass, removeClass } from '@/utils';
@@ -36,7 +36,7 @@ export default class Box {
 	}
 
 	onClick(event) {
-		console.info('Box.onClick');
+		// console.info('Box.onClick');
 
 		const { target } = event;
 
@@ -46,7 +46,7 @@ export default class Box {
 	}
 
 	onFocus() {
-		console.log('Box.onFocus');
+		// console.log('Box.onFocus');
 
 		if (this.activeDescendant) {
 			return false;
@@ -77,8 +77,8 @@ export default class Box {
 		const codes = {
 			[HOME]: () => focus(this.items[0]),
 			[END]: () => focus(this.items[this.items.length - 1]),
-			[ARROWUP]: () => $next.previousElementSibling ? focus($next.previousElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
-			[ARROWDOWN]: () => $next.nextElementSibling ? focus($next.nextElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
+			[ARROW_UP]: () => $next.previousElementSibling ? focus($next.previousElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
+			[ARROW_DOWN]: () => $next.nextElementSibling ? focus($next.nextElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
 			default: () => {
 				const itemToFocus = this.findItemToFocus(key);
 
@@ -90,7 +90,7 @@ export default class Box {
 	}
 
 	focusItem(element) {
-		console.info('Box.focusItem');
+		// console.info('Box.focusItem');
 
 		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
 

@@ -1,7 +1,7 @@
 import {
-	DOWN,
+	ARROW_UP,
+	ARROW_DOWN,
 	ENTER,
-	UP,
 	ESCAPE,
 } from '@19h47/keycode';
 
@@ -44,19 +44,19 @@ export default class Button {
 	}
 
 	onKeyUp(event) {
-		console.log('Button.onKeyUp');
+		// console.log('Button.onKeyUp');
 
 		const key = event.keyCode || event.which;
 
 		const open = () => {
 			event.preventDefault();
 			this.open();
-			this.box.checkKeyPress(event);
+			// this.box.checkKeyPress(event);
 		};
 
 		const codes = {
-			[UP]: open,
-			[DOWN]: open,
+			[ARROW_UP]: open,
+			[ARROW_DOWN]: open,
 			default: () => false,
 		};
 
@@ -91,8 +91,7 @@ export default class Button {
 	}
 
 	open() {
-		console.info('Button.open');
-		console.log(document.activeElement);
+		// console.info('Button.open');
 
 		if (this.isOpen) return false;
 
@@ -110,7 +109,7 @@ export default class Button {
 	}
 
 	close() {
-		console.info('Button.close');
+		// console.info('Button.close');
 
 		if (!this.isOpen) return false;
 
