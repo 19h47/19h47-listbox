@@ -1,9 +1,4 @@
-import {
-	ARROW_UP,
-	ARROW_DOWN,
-	HOME,
-	END,
-} from '@19h47/keycode';
+import { ARROW_UP, ARROW_DOWN, HOME, END } from '@19h47/keycode';
 
 import { addClass, removeClass } from '@/utils';
 
@@ -12,11 +7,11 @@ export default class Box {
 		this.rootElement = element;
 
 		this.handleFocusChange = null;
-		this.keysSoFar = '';
+		this.Keys = '';
 
 		// Bind.
 		this.onFocus = this.onFocus.bind(this);
-		this.onKeyDown = this.onKeyDown.bind(this);
+		this.onKeydown = this.onKeydown.bind(this);
 		this.onClick = this.onClick.bind(this);
 	}
 
@@ -24,14 +19,14 @@ export default class Box {
 		// console.info('Box.init');
 
 		this.activeDescendant = this.rootElement.getAttribute('aria-activedescendant');
-		this.items = [...this.rootElement.querySelectorAll('[role="option"]')];
+		this.options = [...this.rootElement.querySelectorAll('[role="option"]')];
 
 		this.initEvents();
 	}
 
 	initEvents() {
 		this.rootElement.addEventListener('focus', this.onFocus);
-		this.rootElement.addEventListener('keydown', this.onKeyDown);
+		this.rootElement.addEventListener('keydown', this.onKeydown);
 		this.rootElement.addEventListener('click', this.onClick);
 	}
 
@@ -41,7 +36,7 @@ export default class Box {
 		const { target } = event;
 
 		if ('option' === target.getAttribute('role')) {
-			this.focusItem(target);
+			this.focusOption(target);
 		}
 	}
 
@@ -52,16 +47,15 @@ export default class Box {
 			return false;
 		}
 
-		return this.focusItem(this.items[0]);
+		return this.focusOption(this.options[0]);
 	}
-
 
 	/**
 	 * Handle various keyboard controls
 	 *
 	 * @param event The keydown event object
 	 */
-	onKeyDown(event) {
+	onKeydown(event) {
 		const key = event.keyCode || event.which;
 		const $next = this.rootElement.querySelector(`#${this.activeDescendant}`);
 
@@ -71,26 +65,28 @@ export default class Box {
 
 		const focus = element => {
 			event.preventDefault();
-			this.focusItem(element);
+			this.focusOption(element);
 		};
 
 		const codes = {
-			[HOME]: () => focus(this.items[0]),
-			[END]: () => focus(this.items[this.items.length - 1]),
-			[ARROW_UP]: () => $next.previousElementSibling ? focus($next.previousElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
-			[ARROW_DOWN]: () => $next.nextElementSibling ? focus($next.nextElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
+			[HOME]: () => focus(this.options[0]),
+			[END]: () => focus(this.options[this.options.length - 1]),
+			[ARROW_UP]: () =>
+				$next.previousElementSibling ? focus($next.previousElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
+			[ARROW_DOWN]: () =>
+				$next.nextElementSibling ? focus($next.nextElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
 			default: () => {
-				const itemToFocus = this.findItemToFocus(key);
+				const itemToFocus = this.findOptionToFocus(key);
 
-				return itemToFocus ? this.focusItem(itemToFocus) : false;
+				return itemToFocus ? this.focusOption(itemToFocus) : false;
 			},
 		};
 
 		return (codes[key] || codes.default)();
 	}
 
-	focusItem(element) {
-		// console.info('Box.focusItem');
+	focusOption(option) {
+		// console.info('Box.focusOption', element);
 
 		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
 
@@ -99,65 +95,60 @@ export default class Box {
 			$active.removeAttribute('aria-selected');
 		}
 
-		addClass(element, 'is-active');
-		element.setAttribute('aria-selected', true);
+		addClass(option, 'is-active');
+		option.setAttribute('aria-selected', true);
 
-		this.rootElement.setAttribute('aria-activedescendant', element.id);
-		this.activeDescendant = element.id;
+		this.rootElement.setAttribute('aria-activedescendant', option.id);
+		this.activeDescendant = option.id;
 
-		// @TODO check if it's working
 		if (this.rootElement.scrollHeight > this.rootElement.clientHeight) {
 			const scrollBottom = this.rootElement.clientHeight + this.rootElement.scrollTop;
-			const elementBottom = element.offsetTop + element.offsetHeight;
+			const elementBottom = option.offsetTop + option.offsetHeight;
 
 			if (elementBottom > scrollBottom) {
 				this.rootElement.scrollTop = elementBottom - this.rootElement.clientHeight;
-			} else if (element.offsetTop < this.rootElement.scrollTop) {
-				this.rootElement.scrollTop = element.offsetTop;
+			} else if (option.offsetTop < this.rootElement.scrollTop) {
+				this.rootElement.scrollTop = option.offsetTop;
 			}
 		}
 
-		this.handleFocusChange(element);
+		this.handleFocusChange(option);
 	}
 
-	findItemToFocus(key) {
+	findOptionToFocus(key) {
 		const character = String.fromCharCode(key);
 
-		if (!this.keysSoFar) {
-			for (let i = 0; i < this.items.length; i += 1) {
-				if (this.items[i].getAttribute('id') === this.activeDescendant) {
+		if (!this.Keys) {
+			for (let i = 0; i < this.options.length; i += 1) {
+				if (this.options[i].getAttribute('id') === this.activeDescendant) {
 					this.searchIndex = i;
 				}
 			}
 		}
 
-		this.keysSoFar += character;
-		this.clearKeysSoFarAfterDelay();
+		this.Keys += character;
+		this.clearKeysAfterDelay();
 
 		let nextMatch = this.findMatchInRange(
-			this.items,
+			this.options,
 			this.searchIndex + 1,
-			this.items.length,
+			this.options.length,
 		);
 
 		if (!nextMatch) {
-			nextMatch = this.findMatchInRange(
-				this.items,
-				0,
-				this.searchIndex,
-			);
+			nextMatch = this.findMatchInRange(this.options, 0, this.searchIndex);
 		}
 
 		return nextMatch;
 	}
 
-	clearKeysSoFarAfterDelay() {
+	clearKeysAfterDelay() {
 		if (this.keyClear) {
 			clearTimeout(this.keyClear);
 			this.keyClear = null;
 		}
 		this.keyClear = setTimeout(() => {
-			this.keysSoFar = '';
+			this.Keys = '';
 			this.keyClear = null;
 		}, 500);
 	}
@@ -165,12 +156,12 @@ export default class Box {
 	findMatchInRange(list, startIndex, endIndex) {
 		// console.log({ list, startIndex, endIndex });
 
-		// Find the first item starting with the keysSoFar substring, searching in
+		// Find the first item starting with the Keys substring, searching in
 		// the specified range of items
 		for (let i = startIndex; i < endIndex; i += 1) {
 			const label = list[i].innerText;
 
-			if (label && 0 === label.toUpperCase().indexOf(this.keysSoFar)) {
+			if (label && 0 === label.toUpperCase().indexOf(this.Keys)) {
 				return list[i];
 			}
 		}

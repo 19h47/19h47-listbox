@@ -1,9 +1,4 @@
-import {
-	ARROW_UP,
-	ARROW_DOWN,
-	ENTER,
-	ESCAPE,
-} from '@19h47/keycode';
+import { ARROW_UP, ARROW_DOWN, ENTER, ESCAPE } from '@19h47/keycode';
 
 import { addClass, removeClass } from '@/utils';
 
@@ -11,19 +6,16 @@ export default class Button {
 	constructor(element, box, options = {}) {
 		this.rootElement = element;
 		this.box = box;
-		this.options = {
-			delay: 0,
-			...options,
-		};
+		this.options = { delay: 0, ...options };
 
 		this.isOpen = false;
 
 		// Bind.
 		this.open = this.open.bind(this);
-		this.toggle = this.toggle.bind(this);
-		this.onKeyUp = this.onKeyUp.bind(this);
+		this.onClick = this.onClick.bind(this);
+		this.onKeyup = this.onKeyup.bind(this);
 		this.close = this.close.bind(this);
-		this.onKeyDown = this.onKeyDown.bind(this);
+		this.onKeydown = this.onKeydown.bind(this);
 		this.onFocusChange = this.onFocusChange.bind(this);
 	}
 
@@ -36,15 +28,15 @@ export default class Button {
 	initEvents() {
 		// console.log('Button.initEvents');
 
-		this.rootElement.addEventListener('click', this.toggle);
-		this.rootElement.addEventListener('keyup', this.onKeyUp);
+		this.rootElement.addEventListener('click', this.onClick);
+		this.rootElement.addEventListener('keyup', this.onKeyup);
 		this.box.rootElement.addEventListener('blur', this.close);
-		this.box.rootElement.addEventListener('keydown', this.onKeyDown);
+		this.box.rootElement.addEventListener('keydown', this.onKeydown);
 		this.box.setHandleFocusChange(this.onFocusChange);
 	}
 
-	onKeyUp(event) {
-		// console.log('Button.onKeyUp');
+	onKeyup(event) {
+		// console.log('Button.onKeyup');
 
 		const key = event.keyCode || event.which;
 
@@ -63,8 +55,8 @@ export default class Button {
 		return (codes[key] || codes.default)();
 	}
 
-	onKeyDown(event) {
-		// console.log('Button.onKeyDown');
+	onKeydown(event) {
+		// console.log('Button.onKeydown');
 
 		const key = event.keyCode || event.which;
 
@@ -83,8 +75,7 @@ export default class Button {
 		return (codes[key] || codes.default)();
 	}
 
-
-	toggle() {
+	onClick() {
 		if (this.isOpen) return this.close();
 
 		return this.open();

@@ -1,144 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Listbox</title>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		/>
+		<style>
+			.list-group {
+				position: relative;
+				max-height: 293px;
+				visibility: hidden;
+				opacity: 0;
+			}
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Listbox</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<style>
-		.list-group {
-			height: 300px;
-			overflow-y: auto;
-			visibility: hidden;
-			opacity: 0;
-		}
+			.list-group.is-active {
+				visibility: visible;
+				opacity: 1;
+			}
 
-		.list-group.is-active {
-			visibility: visible;
-			opacity: 1;
-		}
+			.list-group-item.is-active {
+				z-index: 2;
+				color: #fff;
+				background-color: #007bff;
+				border-color: #007bff;
+			}
+		</style>
+	</head>
 
-		.list-group-item.is-active {
-			z-index: 2;
-			color: #fff;
-			background-color: #007bff;
-			border-color: #007bff;
-		}
-	</style>
-</head>
-
-<body>
-	<div class="container">
-		<div class="row">
-			<div class="col-12">
-				<h1 class="my-5">
-					<a href="https://github.com/19h47/19h47-list">
-						List
-					</a>
-				</h1>
-			</div>
-			<div class="col-6">
-				<div class="js-list">
-					<h2 id="monster-label">Choose an monster:</h2>
-					<button id="monster-button" class="btn btn-outline-primary my-3 js-list-button"
-						aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
-						<span class="js-list-label">Bat</span>
-					</button>
-					<ul class="list-group js-list-box" tabindex="-1" role="listbox" aria-labelledby="monster-label">
-						<li class="list-group-item list-group-item-action" id="monster-bat" role="option">Bat</li>
-						<li class="list-group-item list-group-item-action" id="monster-bear" role="option">Bear</li>
-						<li class="list-group-item list-group-item-action" id="monster-behir" role="option">Behir</li>
-						<li class="list-group-item list-group-item-action" id="monster-beholder" role="option">Beholder
-						</li>
-						<li class="list-group-item list-group-item-action" id="monster-boar" role="option">Boar</li>
-						<li class="list-group-item list-group-item-action" id="monster-bookworm" role="option">Bookworm</li>
-						<li class="list-group-item list-group-item-action" id="monster-brownie" role="option">Brownie</li>
-						<li class="list-group-item list-group-item-action" id="monster-bugbear" role="option">Bugbear</li>
-						<li class="list-group-item list-group-item-action" id="monster-carrion" role="option">Carrion
-							crawler</li>
-						<li class="list-group-item list-group-item-action" id="monster-catoblepas" role="option">Catoblepas
-						</li>
-						<li class="list-group-item list-group-item-action" id="monster-cats-great" role="option">Cats, great
-						</li>
-						<li class="list-group-item list-group-item-action" id="monster-cave-fisher" role="option">Cave fisher
-						</li>
-						<li class="list-group-item list-group-item-action" id="monster-centaur-sylvan" role="option">Centaur,
-							sylvan</li>
-						<li class="list-group-item list-group-item-action" id="monster-centipede" role="option">
-							Centipede</li>
-						<li class="list-group-item list-group-item-action" id="monster-chimera" role="option">Chimera</li>
-						<li class="list-group-item list-group-item-action" id="monster-cockatrice" role="option">Cockatrice
-						</li>
-						<li class="list-group-item list-group-item-action" id="monster-coualt" role="option">Couatl</li>
-						<li class="list-group-item list-group-item-action" id="monster-dragon-turtle" role="option">
-							Dragon turtle</li>
-						<li class="list-group-item list-group-item-action" id="monster-hydra" role="option">Hydra</li>
-						<li class="list-group-item list-group-item-action" id="monster-minotaur" role="option">Minotaur
-						</li>
-						<li class="list-group-item list-group-item-action" id="monster-ogre" role="option">Ogre</li>
-						<li class="list-group-item list-group-item-action" id="monster-vampire" role="option">Vampire</li>
-						<li class="list-group-item list-group-item-action" id="monster-wyver" role="option">Wyvern</li>
-						<li class="list-group-item list-group-item-action" id="monster-yeti" role="option">Yeti</li>
-						<li class="list-group-item list-group-item-action" id="monster-yuan-ti" role="option">Yuan-ti</li>
-						<li class="list-group-item list-group-item-action" id="monster-zombie" role="option">Zombie</li>
-					</ul>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-12 my-5">
+					<h1 class="">
+						<a href="https://github.com/19h47/19h47-list">
+							List
+						</a>
+					</h1>
 				</div>
-			</div>
-			<div class="col-6">
-				<div class="js-list">
-					<h2 id="monster-label">Choose an monster:</h2>
-					<button id="monster-button" class="btn btn-outline-primary my-3 js-list-button" aria-haspopup="listbox"
-						aria-labelledby="monster-label monster-button" type="button">
-						<span class="js-list-label">Kobold</span>
-					</button>
-					<ul class="list-group js-list-box" tabindex="-1" role="listbox" aria-labelledby="monster-label">
-						<li class="list-group-item list-group-item-action" id="monster-kobold" role="option">Kobold</li>
-						<li class="list-group-item list-group-item-action" id="monster-korred" role="option">Korred</li>
-						<li class="list-group-item list-group-item-action" id="monster-lich" role="option">Lich</li>
-						<li class="list-group-item list-group-item-action" id="monster-lizard" role="option">Lizard</li>
-						<li class="list-group-item list-group-item-action" id="monster-lizard-man" role="option">Lizard man</li>
-						<li class="list-group-item list-group-item-action" id="monster-lycanthrope" role="option">Lycanthrope</li>
-						<li class="list-group-item list-group-item-action" id="monster-manticore" role="option">Manticore</li>
-						<li class="list-group-item list-group-item-action" id="monster-medusa" role="option">Medusa</li>
-						<li class="list-group-item list-group-item-action" id="monster-men" role="option">Men</li>
-						<li class="list-group-item list-group-item-action" id="monster-minotaur" role="option">Minotaur</li>
-						<li class="list-group-item list-group-item-action" id="monster-mud-man" role="option">Mud-man</li>
-						<li class="list-group-item list-group-item-action" id="monster-mummy" role="option">Mummy</li>
-						<li class="list-group-item list-group-item-action" id="monster-nixie" role="option">Nixie</li>
-						<li class="list-group-item list-group-item-action" id="monster-nymph" role="option">Nymph</li>
-						<li class="list-group-item list-group-item-action" id="monster-ogre" role="option">Ogre</li>
-					</ul>
+				<div class="col-12 my-5">
+					<div class="js-list p-3 border rounded-lg">
+						<h2 id="monster-label">Choose an monster</h2>
+						<button
+							id="monster-button"
+							class="btn btn-outline-primary my-3 w-100 js-list-button"
+							aria-haspopup="listbox"
+							aria-labelledby="monster-label monster-button"
+							type="button"
+						>
+							<span class="js-list-label">Bat</span>
+						</button>
+						<div class="border overflow-hidden rounded-lg">
+							<ul
+								class="list-group list-group-flush js-list-box overflow-auto"
+								tabindex="-1"
+								role="listbox"
+								aria-labelledby="monster-label"
+							>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-bat"
+									role="option"
+								>
+									Bat
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-bear"
+									role="option"
+								>
+									Bear
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-behir"
+									role="option"
+								>
+									Behir
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-beholder"
+									role="option"
+								>
+									Beholder
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-boar"
+									role="option"
+								>
+									Boar
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-bookworm"
+									role="option"
+								>
+									Bookworm
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-brownie"
+									role="option"
+								>
+									Brownie
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-bugbear"
+									role="option"
+								>
+									Bugbear
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-carrion"
+									role="option"
+								>
+									Carrion crawler
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-catoblepas"
+									role="option"
+								>
+									Catoblepas
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-cats-great"
+									role="option"
+								>
+									Cats, great
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-cave-fisher"
+									role="option"
+								>
+									Cave fisher
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-centaur-sylvan"
+									role="option"
+								>
+									Centaur, sylvan
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-centipede"
+									role="option"
+								>
+									Centipede
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-chimera"
+									role="option"
+								>
+									Chimera
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-cockatrice"
+									role="option"
+								>
+									Cockatrice
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-coualt"
+									role="option"
+								>
+									Couatl
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-dragon-turtle"
+									role="option"
+								>
+									Dragon turtle
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-hydra"
+									role="option"
+								>
+									Hydra
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-minotaur"
+									role="option"
+								>
+									Minotaur
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-ogre"
+									role="option"
+								>
+									Ogre
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-vampire"
+									role="option"
+								>
+									Vampire
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-wyver"
+									role="option"
+								>
+									Wyvern
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-yeti"
+									role="option"
+								>
+									Yeti
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-yuan-ti"
+									role="option"
+								>
+									Yuan-ti
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-zombie"
+									role="option"
+								>
+									Zombie
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 my-5">
+					<div class="js-list p-3 border rounded-lg">
+						<h2 id="monster-label">Choose an monster:</h2>
+						<button
+							id="monster-button"
+							class="btn btn-outline-primary my-3 js-list-button w-100"
+							aria-haspopup="listbox"
+							aria-labelledby="monster-label monster-button"
+							type="button"
+						>
+							<span class="js-list-label">Kobold</span>
+						</button>
+						<div class="border overflow-hidden rounded-lg">
+							<ul
+								class="list-group list-group-flush js-list-box overflow-auto"
+								tabindex="-1"
+								role="listbox"
+								aria-labelledby="monster-label"
+							>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-kobold"
+									role="option"
+								>
+									Kobold
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-korred"
+									role="option"
+								>
+									Korred
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-lich"
+									role="option"
+								>
+									Lich
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-lizard"
+									role="option"
+								>
+									Lizard
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-lizard-man"
+									role="option"
+								>
+									Lizard man
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-lycanthrope"
+									role="option"
+								>
+									Lycanthrope
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-manticore"
+									role="option"
+								>
+									Manticore
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-medusa"
+									role="option"
+								>
+									Medusa
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-men"
+									role="option"
+								>
+									Men
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-minotaur"
+									role="option"
+								>
+									Minotaur
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-mud-man"
+									role="option"
+								>
+									Mud-man
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-mummy"
+									role="option"
+								>
+									Mummy
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-nixie"
+									role="option"
+								>
+									Nixie
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-nymph"
+									role="option"
+								>
+									Nymph
+								</li>
+								<li
+									class="list-group-item list-group-item-action"
+									id="monster-ogre"
+									role="option"
+								>
+									Ogre
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
+		<script src="main.js"></script>
+		<script>
+			const lists = [...document.querySelectorAll('.js-list')];
 
-	<script src="main.js"></script>
-	<script>
-		const lists = [...document.querySelectorAll('.js-list')];
+			lists.map($list => {
+				const $box = $list.querySelector('.js-list-box');
+				const $button = $list.querySelector('.js-list-button');
 
-		lists.map($list => {
-			const $box = $list.querySelector('.js-list-box');
-			const $button = $list.querySelector('.js-list-button');
+				// Init box.
+				const box = new List.Box($box);
+				box.init();
 
-			// Init box.
-			const box = new List.Box($box);
-			box.init();
+				// Init button.
+				const button = new List.Button($button, box);
+				button.init();
 
-
-			// Init button.
-			const button = new List.Button($button, box);
-			button.init();
-
-			$button.addEventListener('Button.change', (event) => {
-				console.log(event.detail);
+				$button.addEventListener('Button.change', event => {
+					console.log(event.detail);
+				});
 			});
-		});
-
-	</script>
-</body>
-
+		</script>
+	</body>
 </html>
