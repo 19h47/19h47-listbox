@@ -79,9 +79,7 @@ export default class Button {
 	}
 
 	onClick() {
-		if (this.isOpen) return this.close();
-
-		return this.open();
+		return this.isOpen ? this.close() : this.open();
 	}
 
 	onFocus(item) {
