@@ -1,13 +1,16 @@
-import { ARROW_UP, ARROW_DOWN, HOME, END } from '@19h47/keycode';
+import { ARROW_UP, ARROW_DOWN, HOME, END, PAGE_UP, PAGE_DOWN } from '@19h47/keycode';
 
+import EventDispatcher from '@/EventDispatcher';
 import { addClass, removeClass } from '@/utils';
 
-export default class Box {
+export default class Box extends EventDispatcher {
 	constructor(element) {
+		super(['Box.keysChange', 'Box.focus', 'Box.blur', 'Box.keydown']);
+
 		this.rootElement = element;
 
-		this.handleFocusChange = null;
-		this.Keys = '';
+		this.keys = '';
+		this.active = false;
 
 		// Bind.
 		this.onFocus = this.onFocus.bind(this);
@@ -28,6 +31,7 @@ export default class Box {
 		this.rootElement.addEventListener('focus', this.onFocus);
 		this.rootElement.addEventListener('keydown', this.onKeydown);
 		this.rootElement.addEventListener('click', this.onClick);
+		this.rootElement.addEventListener('blur', () => this.emit('Box.blur'));
 	}
 
 	onClick(event) {
@@ -41,7 +45,9 @@ export default class Box {
 	}
 
 	onFocus() {
-		// console.log('Box.onFocus');
+		// console.info('Box.onFocus');
+
+		console.log(this.activeDescendant);
 
 		if (this.activeDescendant) {
 			return false;
@@ -53,13 +59,17 @@ export default class Box {
 	/**
 	 * Handle various keyboard controls
 	 *
-	 * @param event The keydown event object
+	 * @param event The event object
 	 */
 	onKeydown(event) {
-		const key = event.keyCode || event.which;
-		const $next = this.rootElement.querySelector(`#${this.activeDescendant}`);
+		this.emit('Box.keydown', event);
 
-		if (!$next) {
+		const key = event.keyCode || event.which;
+		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
+
+		this.active = this.options.indexOf($active);
+
+		if (!$active) {
 			return false;
 		}
 
@@ -72,9 +82,23 @@ export default class Box {
 			[HOME]: () => focus(this.options[0]),
 			[END]: () => focus(this.options[this.options.length - 1]),
 			[ARROW_UP]: () =>
-				$next.previousElementSibling ? focus($next.previousElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
+				$active.previousElementSibling ? focus($active.previousElementSibling) : false,
 			[ARROW_DOWN]: () =>
-				$next.nextElementSibling ? focus($next.nextElementSibling) : false, // eslint-disable-line no-confusing-arrow, max-len
+				$active.nextElementSibling ? focus($active.nextElementSibling) : false,
+			[PAGE_UP]: () => {
+				if (0 < this.active - 5) {
+					focus(this.options[this.active - 5]);
+				} else {
+					focus(this.options[0]);
+				}
+			},
+			[PAGE_DOWN]: () => {
+				if (this.options.length - 1 > this.active + 5) {
+					focus(this.options[this.active + 5]);
+				} else {
+					focus(this.options[this.options.length - 1]);
+				}
+			},
 			default: () => {
 				const itemToFocus = this.findOptionToFocus(key);
 
@@ -86,7 +110,7 @@ export default class Box {
 	}
 
 	focusOption(option) {
-		// console.info('Box.focusOption', element);
+		// console.info('Box.focusOption');
 
 		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
 
@@ -112,13 +136,13 @@ export default class Box {
 			}
 		}
 
-		this.handleFocusChange(option);
+		this.emit('Box.focus', option);
 	}
 
 	findOptionToFocus(key) {
 		const character = String.fromCharCode(key);
 
-		if (!this.Keys) {
+		if (!this.keys) {
 			for (let i = 0; i < this.options.length; i += 1) {
 				if (this.options[i].getAttribute('id') === this.activeDescendant) {
 					this.searchIndex = i;
@@ -126,7 +150,8 @@ export default class Box {
 			}
 		}
 
-		this.Keys += character;
+		this.keys += character;
+		this.emit('Box.keysChange', this.keys);
 		this.clearKeysAfterDelay();
 
 		let nextMatch = this.findMatchInRange(
@@ -148,7 +173,8 @@ export default class Box {
 			this.keyClear = null;
 		}
 		this.keyClear = setTimeout(() => {
-			this.Keys = '';
+			this.keys = '';
+			this.emit('Box.keysChange', this.keys);
 			this.keyClear = null;
 		}, 500);
 	}
@@ -161,16 +187,10 @@ export default class Box {
 		for (let i = startIndex; i < endIndex; i += 1) {
 			const label = list[i].innerText;
 
-			if (label && 0 === label.toUpperCase().indexOf(this.Keys)) {
+			if (label && 0 === label.toUpperCase().indexOf(this.keys)) {
 				return list[i];
 			}
 		}
 		return null;
-	}
-
-	setHandleFocusChange(focusChangeHandler) {
-		// console.log('Box.setHandleFocusChange');
-
-		this.handleFocusChange = focusChangeHandler;
 	}
 }

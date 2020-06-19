@@ -11,11 +11,11 @@ yarn add @19h47/list
 ```javascript
 const $list = document.querySelector('.js-list');
 
-const $box = $list.querySelector('.js-list-box');
+const $listbox = $list.querySelector('[role="listbox"]');
 const $button = $list.querySelector('.js-list-button');
 
 // Init box.
-const box = new List.Box($box);
+const box = new List.Box($listbox);
 box.init();
 
 // Init button.
@@ -29,7 +29,7 @@ button.init();
 	<button id="button" aria-labelledby="title button" type="button">
 		Bat
 	</button>
-	<ul class="js-list-box hidden" tabindex="-1" role="listbox" aria-labelledby="title">
+	<ul class="hidden" tabindex="-1" role="listbox" aria-labelledby="title">
 		<li id="monster-bat" role="option">Bat</li>
 		<li id="monster-bear" role="option">Bear</li>
 		<li id="monster-behir" role="option">Behir</li>

@@ -43,7 +43,7 @@
 				</div>
 				<div class="col-12 my-5">
 					<div id="monster" class="js-list p-3 border rounded-lg">
-						<h2 id="monster-label">Choose an monster</h2>
+						<h2 id="monster-label">Choose an monster <sup class="js-keys"></sup></h2>
 						<button
 							id="monster-button"
 							class="btn btn-outline-primary my-3 w-100 js-list-button"
@@ -65,7 +65,7 @@
 				</div>
 				<div class="col-12 my-5">
 					<div class="js-list p-3 border rounded-lg" id="spells">
-						<h2 id="monster-label">Choose an spells</h2>
+						<h2 id="monster-label">Choose an spells <sup class="js-keys"></sup></h2>
 						<button
 							id="monster-button"
 							class="btn btn-outline-primary my-3 js-list-button w-100"
@@ -88,6 +88,7 @@
 			</div>
 		</div>
 
+		<script src="https://cdn.rawgit.com/inexorabletash/polyfill/v0.1.42/polyfill.min.js"></script>
 		<script src="main.js"></script>
 		<script>
 			const lists = [...document.querySelectorAll('.js-list')];
@@ -114,8 +115,10 @@
 			`;
 
 			lists.map($list => {
-				const $box = $list.querySelector('.js-list-box');
+				const $listbox = $list.querySelector('[role="listbox"]');
 				const $button = $list.querySelector('.js-list-button');
+				const $keys = $list.querySelector('.js-keys');
+				const $search = $list.querySelector('.js-search');
 				const { id } = $list;
 
 				if ('monster' === id) {
@@ -123,10 +126,10 @@
 
 					data.then(monsters => {
 						monsters.results.forEach(monster => {
-							$box.innerHTML += options(monster.index, monster.name);
+							$listbox.innerHTML += options(monster.index, monster.name);
 						});
 
-						const box = new List.Box($box);
+						const box = new List.Box($listbox);
 						box.init();
 
 						const button = new List.Button($button, box);
@@ -139,10 +142,10 @@
 
 					data.then(spells => {
 						spells.results.forEach(spell => {
-							$box.innerHTML += options(spell.index, spell.name);
+							$listbox.innerHTML += options(spell.index, spell.name);
 						});
 
-						const box = new List.Box($box);
+						const box = new List.Box($listbox);
 						box.init();
 
 						const button = new List.Button($button, box);
@@ -152,6 +155,10 @@
 
 				$button.addEventListener('Button.change', event => {
 					console.log(event.detail);
+				});
+
+				$button.addEventListener('Button.keys', event => {
+					$keys.innerHTML = event.detail.keys;
 				});
 			});
 		</script>

@@ -12,11 +12,12 @@ export default class Button {
 
 		// Bind.
 		this.open = this.open.bind(this);
+		this.close = this.close.bind(this);
 		this.onClick = this.onClick.bind(this);
 		this.onKeyup = this.onKeyup.bind(this);
-		this.close = this.close.bind(this);
 		this.onKeydown = this.onKeydown.bind(this);
-		this.onFocusChange = this.onFocusChange.bind(this);
+		this.onFocus = this.onFocus.bind(this);
+		this.onKeysChange = this.onKeysChange.bind(this);
 	}
 
 	init() {
@@ -26,13 +27,15 @@ export default class Button {
 	}
 
 	initEvents() {
-		// console.log('Button.initEvents');
+		// console.info('Button.initEvents');
 
 		this.rootElement.addEventListener('click', this.onClick);
 		this.rootElement.addEventListener('keyup', this.onKeyup);
-		this.box.rootElement.addEventListener('blur', this.close);
-		this.box.rootElement.addEventListener('keydown', this.onKeydown);
-		this.box.setHandleFocusChange(this.onFocusChange);
+
+		this.box.on('Box.blur', () => this.close());
+		this.box.on('Box.keydown', this.onKeydown);
+		this.box.on('Box.focus', this.onFocus);
+		this.box.on('Box.keysChange', this.onKeysChange);
 	}
 
 	onKeyup(event) {
@@ -56,7 +59,7 @@ export default class Button {
 	}
 
 	onKeydown(event) {
-		// console.log('Button.onKeydown');
+		// console.info('Button.onKeydown');
 
 		const key = event.keyCode || event.which;
 
@@ -79,6 +82,16 @@ export default class Button {
 		if (this.isOpen) return this.close();
 
 		return this.open();
+	}
+
+	onFocus(item) {
+		// console.info('Button.onFocus');
+
+		this.$label.innerText = item.innerText;
+
+		const changeEvent = new CustomEvent('Button.change', { detail: { item } });
+
+		this.rootElement.dispatchEvent(changeEvent);
 	}
 
 	open() {
@@ -113,11 +126,9 @@ export default class Button {
 		return true;
 	}
 
-	onFocusChange(item) {
-		this.$label.innerText = item.innerText;
+	onKeysChange(keys) {
+		const event = new CustomEvent('Button.keys', { detail: { keys } });
 
-		const changeEvent = new CustomEvent('Button.change', { detail: { item } });
-
-		this.rootElement.dispatchEvent(changeEvent);
+		this.rootElement.dispatchEvent(event);
 	}
 }
