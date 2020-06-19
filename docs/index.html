@@ -82,6 +82,8 @@
 				});
 
 				$button.addEventListener('Button.keys', event => {
-					$keys.innerHTML = event.detail.keys;
+					const { keys } = event.detail;
+
+					$keys.innerHTML = keys;
 				});
 			});</script></body></html>
