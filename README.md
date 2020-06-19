@@ -93,7 +93,7 @@ delay
 
 An example is located right [here](https://19h47.github.io/19h47-list/), see [sources](/docs/index.html).
 
-## Acknowledgments
+## References
 
 -   [Example of Tabs with Manual Activation](https://www.w3.org/TR/wai-aria-practices-1.1/examples/listbox/listbox-collapsible.html)
 -   [Keycode](https://keycode.info/) by [Wes Bos](https://wesbos.com/)
