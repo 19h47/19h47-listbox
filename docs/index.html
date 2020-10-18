@@ -1,4 +1,13 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta http-equiv="X-UA-Compatible" content="ie=edge"/><title>Listbox</title><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/><style>.list-group {
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Listbox</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<style>
+			.list-group {
 				position: relative;
 				max-height: 293px;
 				visibility: hidden;
@@ -15,18 +24,65 @@
 				color: #fff;
 				background-color: #007bff;
 				border-color: #007bff;
-			}</style></head><body><div class="container"><div class="row my-5"><div class="col-12"><h1 class="m-0"><a href="https://github.com/19h47/19h47-list">List</a></h1></div></div><div class="row my-5"><div class="col-12"><div id="monster" class="js-list p-3 border rounded-lg"><h2 id="monster-label">Choose an monster <sup class="js-keys"></sup></h2><button id="monster-button" class="btn btn-outline-primary my-3 w-100 js-list-button" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button"><span class="js-list-label">Monsters</span></button><div class="border overflow-hidden rounded-lg" style="height: 293px;"><ul class="list-group list-group-flush js-list-box overflow-auto" tabindex="-1" role="listbox" aria-labelledby="monster-label"></ul></div></div></div></div><div class="row my-5"><div class="col-12"><div class="js-list p-3 border rounded-lg" id="spells"><h2 id="monster-label">Choose an spells <sup class="js-keys"></sup></h2><button id="monster-button" class="btn btn-outline-primary my-3 js-list-button w-100" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button"><span class="js-list-label">Spells</span></button><div class="border overflow-hidden rounded-lg"><ul class="list-group list-group-flush js-list-box overflow-auto" tabindex="-1" role="listbox" aria-labelledby="monster-label"></ul></div></div></div></div></div><script src="https://cdn.rawgit.com/inexorabletash/polyfill/v0.1.42/polyfill.min.js"></script><script src="main.js"></script><script>const lists = [...document.querySelectorAll('.js-list')];
+			}
+
+			.Alert {
+				margin: 1em;
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				z-index: 10;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="Alert js-alert"></div>
+		<div class="container">
+			<div class="row my-5">
+				<div class="col-12">
+					<h1 class="m-0">
+						<a href="https://github.com/19h47/19h47-list"> List </a>
+					</h1>
+				</div>
+			</div>
+			<div class="row my-5">
+				<div class="col-12">
+					<div id="monster" class="js-list p-3 border rounded-lg">
+						<h2 id="monster-label">Choose an monster <sup class="js-keys"></sup></h2>
+						<button id="monster-button" class="btn btn-outline-primary my-3 w-100 js-list-button" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
+							<span class="js-list-label">Monsters</span>
+						</button>
+						<div class="border overflow-hidden rounded-lg" style="height: 293px">
+							<ul class="list-group list-group-flush js-list-box overflow-auto" tabindex="-1" role="listbox" aria-labelledby="monster-label"></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row my-5">
+				<div class="col-12">
+					<div class="js-list p-3 border rounded-lg" id="spells">
+						<h2 id="monster-label">Choose an spells <sup class="js-keys"></sup></h2>
+						<button id="monster-button" class="btn btn-outline-primary my-3 js-list-button w-100" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
+							<span class="js-list-label">Spells</span>
+						</button>
+						<div class="border overflow-hidden rounded-lg">
+							<ul class="list-group list-group-flush js-list-box overflow-auto" tabindex="-1" role="listbox" aria-labelledby="monster-label"></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://cdn.rawgit.com/inexorabletash/polyfill/v0.1.42/polyfill.min.js"></script>
+		<script src="main.js"></script>
+		<script>
+			const lists = [...document.querySelectorAll('.js-list')];
 			const url = 'https://www.dnd5eapi.co/api/';
 
-			const getMonsters = async () => {
-				let response = await fetch(`${url}monsters`);
-				let data = await response.json();
-
-				return data;
-			};
-
-			const getSpells = async () => {
-				let response = await fetch(`${url}spells`);
+			const getData = async url => {
+				let response = await fetch(url);
 				let data = await response.json();
 
 				return data;
@@ -38,7 +94,22 @@
 				</li>
 			`;
 
-			lists.map($list => {
+			const alert = content => {
+				const div = document.createElement('div');
+
+				div.className = 'toast fade show';
+				div.style = 'toast fade show';
+				div.innerHTML = `<div class="toast-body">${content}</div>`;
+
+				div.setAttribute('role', 'alert');
+				div.setAttribute('aria-live', 'assertive');
+				div.setAttribute('aria-atomic', 'true');
+
+				return div;
+			};
+			const $alert = document.querySelector('.js-alert');
+
+			lists.forEach($list => {
 				const $listbox = $list.querySelector('[role="listbox"]');
 				const $button = $list.querySelector('.js-list-button');
 				const $keys = $list.querySelector('.js-keys');
@@ -46,7 +117,7 @@
 				const { id } = $list;
 
 				if ('monster' === id) {
-					const data = getMonsters();
+					const data = getData(`${url}monsters`);
 
 					data.then(monsters => {
 						monsters.results.forEach(monster => {
@@ -62,7 +133,7 @@
 				}
 
 				if ('spells' === id) {
-					const data = getSpells();
+					const data = getData(`${url}spells`);
 
 					data.then(spells => {
 						spells.results.forEach(spell => {
@@ -77,13 +148,26 @@
 					});
 				}
 
-				$button.addEventListener('Button.change', event => {
-					console.log(event.detail);
+				$button.addEventListener('Button.change', ({ detail }) => {
+					const $el = alert(detail.item.innerHTML);
+
+					$alert.appendChild($el);
+
+					$el.addEventListener(
+						'click',
+						() => $el.style.setProperty('display', 'none'),
+						false,
+					);
+
+					setTimeout(() => $el.parentNode.removeChild($el), 2000);
 				});
 
-				$button.addEventListener('Button.keys', event => {
-					const { keys } = event.detail;
+				$button.addEventListener('Button.keys', ({ detail }) => {
+					const { keys } = detail;
 
 					$keys.innerHTML = keys;
 				});
-			});</script></body></html>
+			});
+		</script>
+	</body>
+</html>
