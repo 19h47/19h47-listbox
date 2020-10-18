@@ -47,8 +47,6 @@ export default class Box extends EventDispatcher {
 	onFocus() {
 		// console.info('Box.onFocus');
 
-		console.log(this.activeDescendant);
-
 		if (this.activeDescendant) {
 			return false;
 		}
@@ -100,7 +98,7 @@ export default class Box extends EventDispatcher {
 				}
 			},
 			default: () => {
-				const itemToFocus = this.findOptionToFocus(key);
+				const itemToFocus = this.find(key);
 
 				return itemToFocus ? this.focusOption(itemToFocus) : false;
 			},
@@ -139,7 +137,7 @@ export default class Box extends EventDispatcher {
 		this.emit('Box.focus', option);
 	}
 
-	findOptionToFocus(key) {
+	find(key) {
 		const character = String.fromCharCode(key);
 
 		if (!this.keys) {
@@ -152,7 +150,7 @@ export default class Box extends EventDispatcher {
 
 		this.keys += character;
 		this.emit('Box.keysChange', this.keys);
-		this.clearKeysAfterDelay();
+		this.clear();
 
 		let nextMatch = this.findMatchInRange(
 			this.options,
@@ -167,7 +165,12 @@ export default class Box extends EventDispatcher {
 		return nextMatch;
 	}
 
-	clearKeysAfterDelay() {
+	/**
+	 * Clear
+	 *
+	 * @param {int} delay
+	 */
+	clear(delay = 500) {
 		if (this.keyClear) {
 			clearTimeout(this.keyClear);
 			this.keyClear = null;
@@ -176,7 +179,7 @@ export default class Box extends EventDispatcher {
 			this.keys = '';
 			this.emit('Box.keysChange', this.keys);
 			this.keyClear = null;
-		}, 500);
+		}, delay);
 	}
 
 	findMatchInRange(list, startIndex, endIndex) {
