@@ -1,11 +1,11 @@
 import { ARROW_UP, ARROW_DOWN, HOME, END, PAGE_UP, PAGE_DOWN } from '@19h47/keycode';
 
-import EventDispatcher from '@/EventDispatcher';
+import { EventEmitter } from 'events';
 import { addClass, removeClass } from '@/utils';
 
-export default class Box extends EventDispatcher {
+export default class Box extends EventEmitter {
 	constructor(element) {
-		super(['Box.keysChange', 'Box.focus', 'Box.blur', 'Box.keydown']);
+		super();
 
 		this.rootElement = element;
 

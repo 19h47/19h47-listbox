@@ -1,12 +1,12 @@
 {
 	"name": "@19h47/list",
-	"version": "0.1.7",
+	"version": "0.2.1",
 	"description": "list",
 	"main": "dist/main.js",
 	"scripts": {
 		"prod": "webpack --mode=production --config webpack/webpack.config.js",
 		"dev": "webpack --mode=development --config webpack/webpack.config.js",
-		"deploy": "npm login && npm run prod && npm publish",
+		"deploy": "yarn login && yarn prod && npm publish",
 		"start": "webpack-dev-server --mode=development --hot --config webpack/webpack.config.js"
 	},
 	"repository": {
@@ -51,6 +51,7 @@
 		"webpack-notifier": "^1.8.0"
 	},
 	"dependencies": {
-		"@19h47/keycode": "3.0.3"
+		"@19h47/keycode": "3.0.3",
+		"events": "^3.2.0"
 	}
 }
