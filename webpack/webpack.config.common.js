@@ -28,6 +28,7 @@ module.exports = {
 		inline: true,
 		disableHostCheck: true,
 		writeToDisk: true,
+		injectClient: false
 	},
 	resolve: {
 		alias: {
