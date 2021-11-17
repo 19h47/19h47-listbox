@@ -8,6 +8,7 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const resolve = require('./webpack.utils');
 
@@ -17,18 +18,19 @@ module.exports = {
 		docs: resolve('src/index.js'),
 	},
 	output: {
-		library: 'List',
+		path: resolve('dist'),
+		library: 'Listbox',
 		libraryTarget: 'umd',
 		filename: '../[name]/main.js',
 	},
 	devServer: {
-		contentBase: resolve('/'),
+		static: [
+			resolve('/')
+		],
 		compress: true,
 		port: 3000,
-		inline: true,
-		disableHostCheck: true,
-		writeToDisk: true,
-		injectClient: false
+		// firewall: true,
+		// writeToDisk: true,
 	},
 	resolve: {
 		alias: {
@@ -38,12 +40,6 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			{
-				enforce: 'pre',
-				test: /\.js$/,
-				exclude: /node_modules/,
-				loader: 'eslint-loader',
-			},
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
@@ -66,5 +62,6 @@ module.exports = {
 			excludeWarnings: true,
 			alwaysNotify: true,
 		}),
+		new ESLintPlugin()
 	],
 };

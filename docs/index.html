@@ -40,35 +40,35 @@
 	<body>
 		<div class="Alert js-alert"></div>
 		<div class="container">
-			<div class="row my-5">
+			<div class="my-5 row">
 				<div class="col-12">
 					<h1 class="m-0">
-						<a href="https://github.com/19h47/19h47-list"> List </a>
+						<a href="https://github.com/19h47/19h47-listbox">Listbox</a>
 					</h1>
 				</div>
 			</div>
-			<div class="row my-5">
+			<div class="my-5 row">
 				<div class="col-12">
-					<div id="monster" class="js-list p-3 border rounded-lg">
+					<div id="monster" class="p-3 border rounded-lg js-list">
 						<h2 id="monster-label">Choose an monster <sup class="js-keys"></sup></h2>
-						<button id="monster-button" class="btn btn-outline-primary my-3 w-100 js-list-button" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
+						<button id="monster-button" class="my-3 btn btn-outline-primary w-100 js-list-button" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
 							<span class="js-list-label">Monsters</span>
 						</button>
-						<div class="border overflow-hidden rounded-lg" style="height: 293px">
-							<ul class="list-group list-group-flush js-list-box overflow-auto" tabindex="-1" role="listbox" aria-labelledby="monster-label"></ul>
+						<div class="overflow-hidden border rounded-lg" style="height: 293px">
+							<ul class="overflow-auto list-group list-group-flush js-list-box" tabindex="-1" role="listbox" aria-labelledby="monster-label"></ul>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row my-5">
+			<div class="my-5 row">
 				<div class="col-12">
-					<div class="js-list p-3 border rounded-lg" id="spells">
+					<div class="p-3 border rounded-lg js-list" id="spells">
 						<h2 id="monster-label">Choose an spells <sup class="js-keys"></sup></h2>
-						<button id="monster-button" class="btn btn-outline-primary my-3 js-list-button w-100" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
+						<button id="monster-button" class="my-3 btn btn-outline-primary js-list-button w-100" aria-haspopup="listbox" aria-labelledby="monster-label monster-button" type="button">
 							<span class="js-list-label">Spells</span>
 						</button>
-						<div class="border overflow-hidden rounded-lg">
-							<ul class="list-group list-group-flush js-list-box overflow-auto" tabindex="-1" role="listbox" aria-labelledby="monster-label" aria-multiselectable="true"></ul>
+						<div class="overflow-hidden border rounded-lg">
+							<ul class="overflow-auto list-group list-group-flush js-list-box" tabindex="-1" role="listbox" aria-labelledby="monster-label" aria-multiselectable="true"></ul>
 						</div>
 					</div>
 				</div>
@@ -124,10 +124,10 @@
 							$listbox.innerHTML += options(monster.index, monster.name);
 						});
 
-						const box = new List.Box($listbox);
+						const box = new Listbox.Box($listbox);
 						box.init();
 
-						const button = new List.Button($button, box);
+						const button = new Listbox.Button($button, box);
 						button.init();
 					});
 				}
@@ -140,10 +140,10 @@
 							$listbox.innerHTML += options(spell.index, spell.name);
 						});
 
-						const box = new List.Box($listbox);
+						const box = new Listbox.Box($listbox);
 						box.init();
 
-						const button = new List.Button($button, box);
+						const button = new Listbox.Button($button, box);
 						button.init();
 					});
 				}

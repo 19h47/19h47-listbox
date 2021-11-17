@@ -1,9 +1,11 @@
-# @19h47/list
+# @19h47/listbox
+
+Collapsible single-select listbox widget
 
 ## Installation
 
 ```
-yarn add @19h47/list
+yarn add @19h47/listbox
 ```
 
 ## Usage
@@ -15,20 +17,18 @@ const $listbox = $list.querySelector('[role="listbox"]');
 const $button = $list.querySelector('.js-list-button');
 
 // Init box.
-const box = new List.Box($listbox);
+const box = new Listbox.Box($listbox);
 box.init();
 
 // Init button.
-const button = new List.Button($button, box);
+const button = new Listbox.Button($button, box);
 button.init();
 ```
 
 ```html
 <div class="js-list">
 	<h2 id="title">Choose an monster</h2>
-	<button id="button" aria-labelledby="title button" type="button">
-		Bat
-	</button>
+	<button id="button" aria-labelledby="title button" type="button">Bat</button>
 	<ul class="hidden" tabindex="-1" role="listbox" aria-labelledby="title">
 		<li id="monster-bat" role="option">Bat</li>
 		<li id="monster-bear" role="option">Bear</li>
@@ -43,15 +43,11 @@ button.init();
 		<li id="monster-cats-great" role="option">Cats, great</li>
 		<li id="monster-cave-fisher" role="option">Cave fisher</li>
 		<li id="monster-centaur-sylvan" role="option">Centaur, sylvan</li>
-		<li id="monster-centipede" role="option">
-			Centipede
-		</li>
+		<li id="monster-centipede" role="option">Centipede</li>
 		<li id="monster-chimera" role="option">Chimera</li>
 		<li id="monster-cockatrice" role="option">Cockatrice</li>
 		<li id="monster-coualt" role="option">Couatl</li>
-		<li id="monster-dragon-turtle" role="option">
-			Dragon turtle
-		</li>
+		<li id="monster-dragon-turtle" role="option">Dragon turtle</li>
 		<li id="monster-hydra" role="option">Hydra</li>
 		<li id="monster-minotaur" role="option">Minotaur</li>
 		<li id="monster-ogre" role="option">Ogre</li>
@@ -66,7 +62,7 @@ button.init();
 
 ## Keyboard Support
 
-The list box implements the following keyboard interface.
+The example listbox on this page implements the following keyboard interface.
 
 | Key                  | Function                                                                                                                                                                                                                                        |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
