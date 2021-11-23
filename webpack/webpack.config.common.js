@@ -28,7 +28,7 @@ module.exports = {
 			resolve('/')
 		],
 		compress: true,
-		port: 3000,
+		// port: 3000,
 		// firewall: true,
 		// writeToDisk: true,
 	},

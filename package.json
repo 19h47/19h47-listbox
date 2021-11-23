@@ -1,6 +1,6 @@
 {
 	"name": "@19h47/listbox",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Collapsible single-select listbox widget",
 	"keywords": [
 		"ES6"
@@ -37,7 +37,7 @@
 		"babel-loader": "^8.2.3",
 		"clean-webpack-plugin": "^4.0.0",
 		"core-js": "^3.19.1",
-		"eslint": "^8.2.0",
+		"eslint": "^8.3.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-standard": "^16.0.3",
@@ -48,7 +48,7 @@
 		"eslint-webpack-plugin": "^3.1.1",
 		"html-webpack-plugin": "^5.5.0",
 		"prettier": "^2.4.1",
-		"webpack": "^5.64.1",
+		"webpack": "^5.64.2",
 		"webpack-cli": "^4.9.1",
 		"webpack-dev-server": "^4.5.0",
 		"webpack-merge": "^5.8.0",

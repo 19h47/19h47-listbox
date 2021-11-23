@@ -35,6 +35,7 @@ export default class Button {
 		this.box.on('Box.blur', () => this.close());
 		this.box.on('Box.keydown', this.onKeydown);
 		this.box.on('Box.focus', this.onFocus);
+		this.box.on('Box.click', this.onFocus);
 		this.box.on('Box.keysChange', this.onKeysChange);
 	}
 

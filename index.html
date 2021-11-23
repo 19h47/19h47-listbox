@@ -77,7 +77,8 @@
 			<div class="my-5 row">
 				<div class="col-12">
 					<div class="p-3 border rounded-lg js-list" id="spells">
-						<h2 id="monster-label">Choose an spells <sup class="js-keys"></sup></h2>
+						<h2 id="monster-label">Choose an spells<sup class="js-keys"></sup></h2>
+						<p>(select on focus)</p>
 						<button
 							id="monster-button"
 							class="my-3 btn btn-outline-primary js-list-button w-100"
@@ -150,7 +151,7 @@
 							$listbox.innerHTML += options(monster.index, monster.name);
 						});
 
-						const box = new Listbox.Box($listbox);
+						const box = new Listbox.Box($listbox, false);
 						box.init();
 
 						const button = new Listbox.Button($button, box);
