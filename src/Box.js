@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 import { addClass, removeClass } from '@/utils';
 
 export default class Box extends EventEmitter {
-	constructor(element, selectOnFocus = true) {
+	constructor(element, selectOnFocus = true, blurOnFocus = false) {
 		super();
 
 		this.rootElement = element;
@@ -12,11 +12,13 @@ export default class Box extends EventEmitter {
 		this.keys = '';
 		this.active = false;
 		this.selectOnFocus = selectOnFocus;
+		this.blurOnFocus = blurOnFocus;
 
 		// Bind.
 		this.onFocus = this.onFocus.bind(this);
 		this.onKeydown = this.onKeydown.bind(this);
 		this.onClick = this.onClick.bind(this);
+		this.blur = this.blur.bind(this);
 	}
 
 	init() {
@@ -33,7 +35,11 @@ export default class Box extends EventEmitter {
 
 		this.rootElement.addEventListener('keydown', this.onKeydown);
 		this.rootElement.addEventListener('click', this.onClick);
-		this.rootElement.addEventListener('blur', () => this.emit('Box.blur'));
+		this.rootElement.addEventListener('blur', this.blur);
+	}
+
+	blur() {
+		this.emit('Box.blur');
 	}
 
 	onClick(event) {
@@ -44,6 +50,10 @@ export default class Box extends EventEmitter {
 		if ('option' === target.getAttribute('role')) {
 			this.focusOption(target);
 			this.emit('Box.click', target);
+
+			if (this.blurOnFocus) {
+				this.rootElement.blur();
+			}
 		}
 	}
 
