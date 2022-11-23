@@ -80,11 +80,12 @@ export default class Button {
 	}
 
 	onClick() {
+		// console.info('Button.onClick', this.isOpen);
 		return this.isOpen ? this.close() : this.open();
 	}
 
 	onFocus(item) {
-		// console.info('Button.onFocus');
+		console.info('Button.onFocus');
 
 		this.$label.innerText = item.innerText;
 
@@ -96,7 +97,9 @@ export default class Button {
 	open() {
 		// console.info('Button.open');
 
-		if (this.isOpen) return false;
+		if (this.isOpen) {
+			return false;
+		}
 
 		this.isOpen = true;
 
@@ -112,9 +115,11 @@ export default class Button {
 	}
 
 	close() {
-		// console.info('Button.close');
+		console.info('Button.close');
 
-		if (!this.isOpen) return false;
+		if (!this.isOpen) {
+			return false;
+		}
 
 		this.isOpen = false;
 

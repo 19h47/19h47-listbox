@@ -134,8 +134,6 @@ export default class Box extends EventEmitter {
 	focusOption(option) {
 		// console.info('Box.focusOption');
 
-		console.log(this.multiple)
-
 		if (this.multiple) {
 			toggleClass(option, 'is-active');
 			toggleAttribute(option, 'aria-selected');
