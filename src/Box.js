@@ -1,7 +1,7 @@
 import { ARROW_UP, ARROW_DOWN, HOME, END, PAGE_UP, PAGE_DOWN } from '@19h47/keycode';
 
 import { EventEmitter } from 'events';
-import { addClass, removeClass } from '@/utils';
+import { addClass, removeClass, toggleAttribute, toggleClass } from '@/utils';
 
 export default class Box extends EventEmitter {
 	constructor(element, selectOnFocus = true, blurOnFocus = false) {
@@ -13,6 +13,13 @@ export default class Box extends EventEmitter {
 		this.active = false;
 		this.selectOnFocus = selectOnFocus;
 		this.blurOnFocus = blurOnFocus;
+
+		// this.multiple = JSON.parse(this.rootElement.getAttribute('aria-multiselectable')) || false;
+		this.multiple = false
+
+		if (this.multiple) {
+			this.selectOnFocus = false;
+		}
 
 		// Bind.
 		this.onFocus = this.onFocus.bind(this);
@@ -49,7 +56,10 @@ export default class Box extends EventEmitter {
 
 		if ('option' === target.getAttribute('role')) {
 			this.focusOption(target);
-			this.emit('Box.click', target);
+
+			if (!this.multiple) {
+				this.emit('Box.click', target);
+			}
 
 			if (this.blurOnFocus) {
 				this.rootElement.blur();
@@ -86,6 +96,7 @@ export default class Box extends EventEmitter {
 
 		const focus = element => {
 			event.preventDefault();
+
 			this.focusOption(element);
 		};
 
@@ -123,15 +134,23 @@ export default class Box extends EventEmitter {
 	focusOption(option) {
 		// console.info('Box.focusOption');
 
-		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
+		console.log(this.multiple)
 
-		if ($active) {
-			removeClass($active, 'is-active');
-			$active.removeAttribute('aria-selected');
+		if (this.multiple) {
+			toggleClass(option, 'is-active');
+			toggleAttribute(option, 'aria-selected');
+		} else {
+			const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
+
+			if ($active) {
+				removeClass($active, 'is-active');
+				$active.removeAttribute('aria-selected');
+			}
+
+			addClass(option, 'is-active');
+			option.setAttribute('aria-selected', true);
 		}
 
-		addClass(option, 'is-active');
-		option.setAttribute('aria-selected', true);
 
 		this.rootElement.setAttribute('aria-activedescendant', option.id);
 		this.activeDescendant = option.id;
