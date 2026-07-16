@@ -7,7 +7,9 @@
 		<title>Listbox</title>
 		<link
 			rel="stylesheet"
-			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+			integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+			crossorigin="anonymous"
 		/>
 		<style>
 			.list-group {
@@ -77,13 +79,13 @@
 			<div class="my-5 row">
 				<div class="col-12">
 					<div class="p-3 border rounded-lg js-list" id="spells">
-						<h2 id="monster-label">Choose an spells<sup class="js-keys"></sup></h2>
+						<h2 id="spells-label">Choose an spells<sup class="js-keys"></sup></h2>
 						<p>(select on focus)</p>
 						<button
-							id="monster-button"
+							id="spells-button"
 							class="my-3 btn btn-outline-primary js-list-button w-100"
 							aria-haspopup="listbox"
-							aria-labelledby="monster-label monster-button"
+							aria-labelledby="spells-label spells-button"
 							type="button"
 						>
 							<span class="js-list-label">Spells</span>
@@ -93,7 +95,7 @@
 								class="overflow-auto list-group list-group-flush js-list-box"
 								tabindex="-1"
 								role="listbox"
-								aria-labelledby="monster-label"
+								aria-labelledby="spells-label"
 								aria-multiselectable="true"
 							></ul>
 						</div>
@@ -102,15 +104,15 @@
 			</div>
 		</div>
 
-		<script src="https://cdn.rawgit.com/inexorabletash/polyfill/v0.1.42/polyfill.min.js"></script>
-		<script src="main.js"></script>
-		<script>
+		<script type="module">
+			import { Box, Button } from './lib/index.ts';
+
 			const lists = [...document.querySelectorAll('.js-list')];
 			const url = 'https://www.dnd5eapi.co/api/';
 
 			const getData = async url => {
-				let response = await fetch(url);
-				let data = await response.json();
+				const response = await fetch(url);
+				const data = await response.json();
 
 				return data;
 			};
@@ -125,7 +127,6 @@
 				const div = document.createElement('div');
 
 				div.className = 'toast fade show';
-				div.style = 'toast fade show';
 				div.innerHTML = `<div class="toast-body"><strong>${content}</strong></div>`;
 
 				div.setAttribute('role', 'alert');
@@ -134,43 +135,39 @@
 
 				return div;
 			};
+
 			const $alert = document.querySelector('.js-alert');
 
 			lists.forEach($list => {
 				const $listbox = $list.querySelector('[role="listbox"]');
 				const $button = $list.querySelector('.js-list-button');
 				const $keys = $list.querySelector('.js-keys');
-				const $search = $list.querySelector('.js-search');
 				const { id } = $list;
 
 				if ('monster' === id) {
-					const data = getData(`${url}monsters`);
-
-					data.then(monsters => {
+					getData(`${url}monsters`).then(monsters => {
 						monsters.results.forEach(monster => {
 							$listbox.innerHTML += options(monster.index, monster.name);
 						});
 
-						const box = new Listbox.Box($listbox, false);
+						const box = new Box($listbox, false);
 						box.init();
 
-						const button = new Listbox.Button($button, box);
+						const button = new Button($button, box);
 						button.init();
 					});
 				}
 
 				if ('spells' === id) {
-					const data = getData(`${url}spells`);
-
-					data.then(spells => {
+					getData(`${url}spells`).then(spells => {
 						spells.results.forEach(spell => {
 							$listbox.innerHTML += options(spell.index, spell.name);
 						});
 
-						const box = new Listbox.Box($listbox);
+						const box = new Box($listbox);
 						box.init();
 
-						const button = new Listbox.Button($button, box);
+						const button = new Button($button, box);
 						button.init();
 					});
 				}

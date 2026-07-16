@@ -1,4 +1,6 @@
+/dist/
+/node_modules/
+.pnpm-store/
+
 .DS_Store
-node_modules
-dist
 .npmignore

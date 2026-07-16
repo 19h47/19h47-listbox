@@ -5,30 +5,34 @@ Collapsible single-select listbox widget
 ## Installation
 
 ```
-yarn add @19h47/listbox
+pnpm add @19h47/listbox
 ```
 
 ## Usage
 
 ```javascript
+import { Box, Button } from '@19h47/listbox';
+
 const $list = document.querySelector('.js-list');
 
 const $listbox = $list.querySelector('[role="listbox"]');
 const $button = $list.querySelector('.js-list-button');
 
 // Init box.
-const box = new Listbox.Box($listbox);
+const box = new Box($listbox);
 box.init();
 
 // Init button.
-const button = new Listbox.Button($button, box);
+const button = new Button($button, box);
 button.init();
 ```
 
 ```html
 <div class="js-list">
 	<h2 id="title">Choose an monster</h2>
-	<button id="button" aria-labelledby="title button" type="button">Bat</button>
+	<button id="button" aria-labelledby="title button" type="button">
+		<span class="js-list-label">Bat</span>
+	</button>
 	<ul class="hidden" tabindex="-1" role="listbox" aria-labelledby="title">
 		<li id="monster-bat" role="option">Bat</li>
 		<li id="monster-bear" role="option">Bear</li>
@@ -87,9 +91,9 @@ delay
 
 ## Example
 
-An example is located right [here](https://19h47.github.io/19h47-list/), see [sources](/docs/index.html).
+An example is located right [here](https://19h47.github.io/19h47-listbox/), see [sources](/docs/index.html).
 
 ## References
 
--   [Example of Tabs with Manual Activation](https://www.w3.org/TR/wai-aria-practices-1.1/examples/listbox/listbox-collapsible.html)
--   [Keycode](https://keycode.info/) by [Wes Bos](https://wesbos.com/)
+- [Example of Tabs with Manual Activation](https://www.w3.org/TR/wai-aria-practices-1.1/examples/listbox/listbox-collapsible.html)
+- [Keycode](https://keycode.info/) by [Wes Bos](https://wesbos.com/)

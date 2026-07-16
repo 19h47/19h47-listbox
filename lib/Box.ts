@@ -1,58 +1,70 @@
-import { ARROW_UP, ARROW_DOWN, HOME, END, PAGE_UP, PAGE_DOWN } from '@19h47/keycode';
+import { ARROW_UP, ARROW_DOWN, HOME, END, PAGE_UP, PAGE_DOWN } from './keycode';
 
-import { EventEmitter } from 'events';
-import { addClass, removeClass, toggleAttribute, toggleClass } from '@/utils';
+import EventEmitter from './EventEmitter';
+import { addClass, removeClass, toggleAttribute, toggleClass } from './utils';
 
 export default class Box extends EventEmitter {
-	constructor(element, selectOnFocus = true, blurOnFocus = false) {
+	rootElement: HTMLElement;
+
+	keys = '';
+
+	active = -1;
+
+	selectOnFocus: boolean;
+
+	blurOnFocus: boolean;
+
+	multiple = false;
+
+	activeDescendant: string | null = null;
+
+	options: HTMLElement[] = [];
+
+	searchIndex = 0;
+
+	keyClear: ReturnType<typeof setTimeout> | null = null;
+
+	constructor(element: HTMLElement, selectOnFocus = true, blurOnFocus = false) {
 		super();
 
 		this.rootElement = element;
-
-		this.keys = '';
-		this.active = false;
 		this.selectOnFocus = selectOnFocus;
 		this.blurOnFocus = blurOnFocus;
-
-		// this.multiple = JSON.parse(this.rootElement.getAttribute('aria-multiselectable')) || false;
-		this.multiple = false
 
 		if (this.multiple) {
 			this.selectOnFocus = false;
 		}
 
-		// Bind.
 		this.onFocus = this.onFocus.bind(this);
 		this.onKeydown = this.onKeydown.bind(this);
 		this.onClick = this.onClick.bind(this);
 		this.blur = this.blur.bind(this);
 	}
 
-	init() {
-		// console.info('Box.init');
-
+	init(): void {
 		this.activeDescendant = this.rootElement.getAttribute('aria-activedescendant');
-		this.options = [...this.rootElement.querySelectorAll('[role="option"]')];
+		this.options = [...this.rootElement.querySelectorAll<HTMLElement>('[role="option"]')];
 
 		this.initEvents();
 	}
 
-	initEvents() {
+	initEvents(): void {
 		this.rootElement.addEventListener('focus', this.onFocus);
-
 		this.rootElement.addEventListener('keydown', this.onKeydown);
 		this.rootElement.addEventListener('click', this.onClick);
 		this.rootElement.addEventListener('blur', this.blur);
 	}
 
-	blur() {
+	blur(): void {
 		this.emit('Box.blur');
 	}
 
-	onClick(event) {
-		// console.info('Box.onClick');
-
+	onClick(event: MouseEvent): void {
 		const { target } = event;
+
+		if (!(target instanceof HTMLElement)) {
+			return;
+		}
 
 		if ('option' === target.getAttribute('role')) {
 			this.focusOption(target);
@@ -67,9 +79,7 @@ export default class Box extends EventEmitter {
 		}
 	}
 
-	onFocus() {
-		// console.info('Box.onFocus');
-
+	onFocus(): false | void {
 		if (this.activeDescendant) {
 			return false;
 		}
@@ -79,34 +89,37 @@ export default class Box extends EventEmitter {
 
 	/**
 	 * Handle various keyboard controls
-	 *
-	 * @param event The event object
 	 */
-	onKeydown(event) {
+	onKeydown(event: KeyboardEvent): false | void {
 		this.emit('Box.keydown', event);
 
 		const key = event.keyCode || event.which;
-		const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
+		const $active = this.activeDescendant
+			? this.rootElement.querySelector<HTMLElement>(`#${this.activeDescendant}`)
+			: null;
 
-		this.active = this.options.indexOf($active);
+		this.active = $active ? this.options.indexOf($active) : -1;
 
 		if (!$active) {
 			return false;
 		}
 
-		const focus = element => {
+		const focus = (element: HTMLElement) => {
 			event.preventDefault();
-
 			this.focusOption(element);
 		};
 
-		const codes = {
+		const codes: Record<number | string, () => false | void> = {
 			[HOME]: () => focus(this.options[0]),
 			[END]: () => focus(this.options[this.options.length - 1]),
 			[ARROW_UP]: () =>
-				$active.previousElementSibling ? focus($active.previousElementSibling) : false,
+				$active.previousElementSibling instanceof HTMLElement
+					? focus($active.previousElementSibling)
+					: false,
 			[ARROW_DOWN]: () =>
-				$active.nextElementSibling ? focus($active.nextElementSibling) : false,
+				$active.nextElementSibling instanceof HTMLElement
+					? focus($active.nextElementSibling)
+					: false,
 			[PAGE_UP]: () => {
 				if (0 < this.active - 5) {
 					focus(this.options[this.active - 5]);
@@ -131,14 +144,14 @@ export default class Box extends EventEmitter {
 		return (codes[key] || codes.default)();
 	}
 
-	focusOption(option) {
-		// console.info('Box.focusOption');
-
+	focusOption(option: HTMLElement): void {
 		if (this.multiple) {
 			toggleClass(option, 'is-active');
 			toggleAttribute(option, 'aria-selected');
 		} else {
-			const $active = this.rootElement.querySelector(`#${this.activeDescendant}`);
+			const $active = this.activeDescendant
+				? this.rootElement.querySelector<HTMLElement>(`#${this.activeDescendant}`)
+				: null;
 
 			if ($active) {
 				removeClass($active, 'is-active');
@@ -146,9 +159,8 @@ export default class Box extends EventEmitter {
 			}
 
 			addClass(option, 'is-active');
-			option.setAttribute('aria-selected', true);
+			option.setAttribute('aria-selected', 'true');
 		}
-
 
 		this.rootElement.setAttribute('aria-activedescendant', option.id);
 		this.activeDescendant = option.id;
@@ -169,7 +181,7 @@ export default class Box extends EventEmitter {
 		}
 	}
 
-	find(key) {
+	find(key: number): HTMLElement | null {
 		const character = String.fromCharCode(key);
 
 		if (!this.keys) {
@@ -198,15 +210,14 @@ export default class Box extends EventEmitter {
 	}
 
 	/**
-	 * Clear
-	 *
-	 * @param {int} delay
+	 * Clear typed character buffer after delay
 	 */
-	clear(delay = 500) {
+	clear(delay = 500): void {
 		if (this.keyClear) {
 			clearTimeout(this.keyClear);
 			this.keyClear = null;
 		}
+
 		this.keyClear = setTimeout(() => {
 			this.keys = '';
 			this.emit('Box.keysChange', this.keys);
@@ -214,11 +225,11 @@ export default class Box extends EventEmitter {
 		}, delay);
 	}
 
-	findMatchInRange(list, startIndex, endIndex) {
-		// console.log({ list, startIndex, endIndex });
-
-		// Find the first item starting with the Keys substring, searching in
-		// the specified range of items
+	findMatchInRange(
+		list: HTMLElement[],
+		startIndex: number,
+		endIndex: number,
+	): HTMLElement | null {
 		for (let i = startIndex; i < endIndex; i += 1) {
 			const label = list[i].innerText;
 
@@ -226,6 +237,7 @@ export default class Box extends EventEmitter {
 				return list[i];
 			}
 		}
+
 		return null;
 	}
 }

@@ -1,16 +1,28 @@
-import { ARROW_UP, ARROW_DOWN, ENTER, ESCAPE } from '@19h47/keycode';
+import { ARROW_UP, ARROW_DOWN, ENTER, ESCAPE } from './keycode';
 
-import { addClass, removeClass } from '@/utils';
+import { addClass, removeClass } from './utils';
+import type Box from './Box';
+
+export type ButtonOptions = {
+	delay?: number;
+};
 
 export default class Button {
-	constructor(element, box, options = {}) {
+	rootElement: HTMLElement;
+
+	box: Box;
+
+	options: Required<ButtonOptions>;
+
+	isOpen = false;
+
+	$label: HTMLElement | null = null;
+
+	constructor(element: HTMLElement, box: Box, options: ButtonOptions = {}) {
 		this.rootElement = element;
 		this.box = box;
 		this.options = { delay: 0, ...options };
 
-		this.isOpen = false;
-
-		// Bind.
 		this.open = this.open.bind(this);
 		this.close = this.close.bind(this);
 		this.onClick = this.onClick.bind(this);
@@ -20,15 +32,12 @@ export default class Button {
 		this.onKeysChange = this.onKeysChange.bind(this);
 	}
 
-	init() {
+	init(): void {
 		this.$label = this.rootElement.querySelector('.js-list-label');
-
 		this.initEvents();
 	}
 
-	initEvents() {
-		// console.info('Button.initEvents');
-
+	initEvents(): void {
 		this.rootElement.addEventListener('click', this.onClick);
 		this.rootElement.addEventListener('keyup', this.onKeyup);
 
@@ -39,18 +48,15 @@ export default class Button {
 		this.box.on('Box.keysChange', this.onKeysChange);
 	}
 
-	onKeyup(event) {
-		// console.log('Button.onKeyup');
-
+	onKeyup(event: KeyboardEvent): false | void {
 		const key = event.keyCode || event.which;
 
 		const open = () => {
 			event.preventDefault();
 			this.open();
-			// this.box.checkKeyPress(event);
 		};
 
-		const codes = {
+		const codes: Record<number | string, () => false | void> = {
 			[ARROW_UP]: open,
 			[ARROW_DOWN]: open,
 			default: () => false,
@@ -59,9 +65,7 @@ export default class Button {
 		return (codes[key] || codes.default)();
 	}
 
-	onKeydown(event) {
-		// console.info('Button.onKeydown');
-
+	onKeydown(event: KeyboardEvent): false | void {
 		const key = event.keyCode || event.which;
 
 		const close = () => {
@@ -70,7 +74,7 @@ export default class Button {
 			this.rootElement.focus();
 		};
 
-		const codes = {
+		const codes: Record<number | string, () => false | void> = {
 			[ENTER]: close,
 			[ESCAPE]: close,
 			default: () => false,
@@ -79,24 +83,21 @@ export default class Button {
 		return (codes[key] || codes.default)();
 	}
 
-	onClick() {
-		// console.info('Button.onClick', this.isOpen);
+	onClick(): boolean {
 		return this.isOpen ? this.close() : this.open();
 	}
 
-	onFocus(item) {
-		console.info('Button.onFocus');
-
-		this.$label.innerText = item.innerText;
+	onFocus(item: HTMLElement): void {
+		if (this.$label) {
+			this.$label.innerText = item.innerText;
+		}
 
 		const changeEvent = new CustomEvent('Button.change', { detail: { item } });
 
 		this.rootElement.dispatchEvent(changeEvent);
 	}
 
-	open() {
-		// console.info('Button.open');
-
+	open(): boolean {
 		if (this.isOpen) {
 			return false;
 		}
@@ -104,8 +105,7 @@ export default class Button {
 		this.isOpen = true;
 
 		addClass(this.box.rootElement, 'is-active');
-
-		this.rootElement.setAttribute('aria-expanded', true);
+		this.rootElement.setAttribute('aria-expanded', 'true');
 
 		setTimeout(() => {
 			this.box.rootElement.focus();
@@ -114,9 +114,7 @@ export default class Button {
 		return true;
 	}
 
-	close() {
-		console.info('Button.close');
-
+	close(): boolean {
 		if (!this.isOpen) {
 			return false;
 		}
@@ -124,13 +122,12 @@ export default class Button {
 		this.isOpen = false;
 
 		removeClass(this.box.rootElement, 'is-active');
-
 		this.rootElement.removeAttribute('aria-expanded');
 
 		return true;
 	}
 
-	onKeysChange(keys) {
+	onKeysChange(keys: string): void {
 		const event = new CustomEvent('Button.keys', { detail: { keys } });
 
 		this.rootElement.dispatchEvent(event);
